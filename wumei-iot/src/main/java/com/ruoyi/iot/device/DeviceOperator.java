@@ -1,8 +1,5 @@
 package com.ruoyi.iot.device;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
 import reactor.core.publisher.Mono;
 
 /**
@@ -11,7 +8,7 @@ import reactor.core.publisher.Mono;
  * @author zhouhao
  * @since 1.0.0
  */
-public interface DeviceOperator extends {
+public interface DeviceOperator {
 
     /**
      * @return 设备ID
@@ -19,8 +16,9 @@ public interface DeviceOperator extends {
     String getDeviceId();
 
     /**
-     */
-    Mono<String> getConnectionServerId();
+	 * 当前设备连接所在服务器ID
+	 */
+	String getConnectionServerId();
 
     /**
      * @return 当前设备连接会话ID
@@ -83,7 +81,6 @@ public interface DeviceOperator extends {
     }
 
     Mono<Boolean> online(String serverId, String sessionId, String address);
-
 
 
     /**

@@ -16,6 +16,10 @@
     </description>
 
     <dependencies>
+        <dependency>
+            <groupId>org.hswebframework.web</groupId>
+            <artifactId>hsweb-core</artifactId>
+        </dependency>
 
         <!-- 通用工具-->
         <dependency>

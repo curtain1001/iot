@@ -4,8 +4,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import com.ruoyi.common.utils.sign.Base64;
 
 /**
  *
@@ -37,7 +36,7 @@ public class AESUtils {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
         byte[] encrypted = cipher.doFinal(sSrc.getBytes());
         //此处使用BASE64做转码功能，同时能起到2次加密的作用。
-        return new BASE64Encoder().encode(encrypted);
+		return Base64.encode(encrypted);
     }
 
     // 解密
@@ -59,11 +58,10 @@ public class AESUtils {
             IvParameterSpec iv = new IvParameterSpec(ivString.getBytes());
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
             //先用base64解密
-            byte[] encrypted1 = new BASE64Decoder().decodeBuffer(sSrc);
+			byte[] encrypted1 = Base64.decode(sSrc);
             try {
                 byte[] original = cipher.doFinal(encrypted1);
-                String originalString = new String(original);
-                return originalString;
+				return new String(original);
             } catch (Exception e) {
                 System.out.println(e.toString());
                 return null;
