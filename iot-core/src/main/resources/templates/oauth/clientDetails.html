@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/layout"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.oauth.com/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<th:block layout:fragment="content">
+
+    <div>
+        <label class="control-label">clientId：(客户端的唯一标识符可以用户自定义一般企业缩写)</label>
+        <input class="form-control" name="clientId" type="text">
+
+        <label class="control-label">resourceIds：(客户端可以访问的资源集合)</label>
+        <input class="form-control" name="resourceIds" type="text">
+
+        <label class="control-label">clientSecret：(客户端密钥,用户或者公司提供也可以系统生成)</label>
+        <input class="form-control" name="clientSecret" type="text">
+
+        <label class="control-label">scope：(目前定义有3种 {read write trust})</label>
+        <input class="form-control" name="scope" type="url">
+
+        <label class="control-label">authorizedGrantTypes：(授权类型)</label>
+        <input class="form-control" name="authorizedGrantTypes" type="text">
+
+        <label class="control-label">webServerRedirectUri：(重定向地址一般是访问的主域名)</label>
+        <input class="form-control" name="webServerRedirectUri" type="text">
+
+        <label class="control-label">authorities：(权限集合)</label>
+        <input class="form-control" name="authorities" type="email">
+
+        <label class="control-label">accessTokenValidity：(accessToken 有效时间 毫秒值)</label>
+        <input class="form-control" name="accessTokenValidity" type="url">
+
+        <label class="control-label">refreshTokenValidity：(refreshToken 有效时间 毫秒值)</label>
+        <input class="form-control" name="refreshTokenValidity" type="text">
+
+        <label class="control-label">additional_information：(附加信息)</label>
+        <input class="form-control" name="additional_information" type="text">
+
+        <label class="control-label">autoapprove：(是否自动审批通过 true 是 false 否)</label>
+        <input class="form-control" name="autoapprove" type="text">
+
+    </div>
+
+</th:block>
+
+</body>

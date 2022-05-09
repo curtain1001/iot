@@ -1,0 +1,140 @@
+package net.pingfang.iot.core.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import net.pingfang.iot.common.annotation.Log;
+import net.pingfang.iot.common.core.controller.BaseController;
+import net.pingfang.iot.common.core.domain.AjaxResult;
+import net.pingfang.iot.common.core.page.TableDataInfo;
+import net.pingfang.iot.common.enums.BusinessType;
+import net.pingfang.iot.common.utils.poi.ExcelUtil;
+import net.pingfang.iot.core.domain.Product;
+import net.pingfang.iot.core.model.ChangeProductStatusModel;
+import net.pingfang.iot.core.model.IdAndName;
+import net.pingfang.iot.core.service.IProductService;
+
+/**
+ * 产品Controller
+ *
+ * @author kerwincui
+ * @date 2021-12-16
+ */
+@Api(tags = "产品管理")
+@RestController
+@RequestMapping("/iot/product")
+public class ProductController extends BaseController {
+	@Autowired
+	private IProductService productService;
+
+	/**
+	 * 查询产品列表
+	 */
+	@PreAuthorize("@ss.hasPermi('iot:product:list')")
+	@GetMapping("/list")
+	@ApiOperation("产品分页列表")
+	public TableDataInfo list(Product product) {
+		startPage();
+		List<Product> list = new ArrayList<>();
+		if (product.getTenantName() == "" || product.getTenantName() == null) {
+			list = productService.selectProductList(product);
+		} else {
+			list = productService.selectProductListAccurate(product);
+		}
+		return getDataTable(list);
+	}
+
+	/**
+	 * 查询产品简短列表
+	 */
+	@PreAuthorize("@ss.hasPermi('iot:product:list')")
+	@GetMapping("/shortList")
+	@ApiOperation("产品简短列表")
+	public AjaxResult shortList(Product product) {
+
+		List<IdAndName> list = productService.selectProductShortList();
+		return AjaxResult.success(list);
+	}
+
+	/**
+	 * 导出产品列表
+	 */
+	@PreAuthorize("@ss.hasPermi('iot:product:export')")
+	@Log(title = "产品", businessType = BusinessType.EXPORT)
+	@PostMapping("/export")
+	@ApiOperation("导出产品")
+	public void export(HttpServletResponse response, Product product) {
+		List<Product> list = productService.selectProductList(product);
+		ExcelUtil<Product> util = new ExcelUtil<Product>(Product.class);
+		util.exportExcel(response, list, "产品数据");
+	}
+
+	/**
+	 * 获取产品详细信息
+	 */
+	@PreAuthorize("@ss.hasPermi('iot:product:query')")
+	@GetMapping(value = "/{productId}")
+	@ApiOperation("获取产品详情")
+	public AjaxResult getInfo(@PathVariable("productId") Long productId) {
+		return AjaxResult.success(productService.selectProductByProductId(productId));
+	}
+
+	/**
+	 * 新增产品
+	 */
+	@PreAuthorize("@ss.hasPermi('iot:product:add')")
+	@Log(title = "产品", businessType = BusinessType.INSERT)
+	@PostMapping
+	@ApiOperation("添加产品")
+	public AjaxResult add(@RequestBody Product product) {
+		return AjaxResult.success(productService.insertProduct(product));
+	}
+
+	/**
+	 * 修改产品
+	 */
+	@PreAuthorize("@ss.hasPermi('iot:product:edit')")
+	@Log(title = "产品", businessType = BusinessType.UPDATE)
+	@PutMapping
+	@ApiOperation("修改产品")
+	public AjaxResult edit(@RequestBody Product product) {
+		return toAjax(productService.updateProduct(product));
+	}
+
+	/**
+	 * 发布产品
+	 */
+	@PreAuthorize("@ss.hasPermi('iot:product:edit')")
+	@Log(title = "更新产品状态", businessType = BusinessType.UPDATE)
+	@PutMapping("/status")
+	@ApiOperation("更新产品状态")
+	public AjaxResult changeProductStatus(@RequestBody ChangeProductStatusModel model) {
+		return productService.changeProductStatus(model);
+	}
+
+	/**
+	 * 删除产品
+	 */
+	@PreAuthorize("@ss.hasPermi('iot:product:remove')")
+	@Log(title = "产品", businessType = BusinessType.DELETE)
+	@DeleteMapping("/{productIds}")
+	@ApiOperation("批量删除产品")
+	public AjaxResult remove(@PathVariable Long[] productIds) {
+		return productService.deleteProductByProductIds(productIds);
+	}
+}

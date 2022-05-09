@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.wumei</groupId>
-    <artifactId>wumei</artifactId>
-    <version>3.8.0</version>
+    <groupId>net.pingfang</groupId>
+    <artifactId>iot</artifactId>
+    <version>1.0</version>
 
-    <name>wumei</name>
-    <url>http://www.wumei.live</url>
-    <description>物美智能开源生活物联网平台</description>
+    <name>pingfang</name>
 
     <properties>
-        <wumei.version>3.8.0</wumei.version>
+        <iot.version>1.0</iot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -35,36 +32,11 @@
         <jwt.version>0.9.1</jwt.version>
         <justAuth.version>1.16.5</justAuth.version>
         <forest.version>1.5.19</forest.version>
-        <hsweb.framework.version>4.0.13</hsweb.framework.version>
-        <vertx.version>4.2.3</vertx.version>
     </properties>
 
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
-
-            <dependency>
-                <groupId>org.hswebframework.web</groupId>
-                <artifactId>hsweb-core</artifactId>
-                <version>${hsweb.framework.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.22</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>2.1</version>
-            </dependency>
-            <!--            <dependency>-->
-            <!--                <groupId>com.sun.xml.bind</groupId>-->
-            <!--                <artifactId>jaxb-impl</artifactId>-->
-            <!--                <version>2.1.2</version>-->
-            <!--            </dependency>-->
 
             <!-- SpringBoot的依赖配置-->
             <dependency>
@@ -193,74 +165,58 @@
 
             <!-- 定时任务-->
             <dependency>
-                <groupId>com.wumei</groupId>
-                <artifactId>wumei-quartz</artifactId>
-                <version>${wumei.version}</version>
+                <groupId>net.pingfang</groupId>
+                <artifactId>iot-quartz</artifactId>
+                <version>${iot.version}</version>
             </dependency>
 
             <!-- 代码生成-->
             <dependency>
-                <groupId>com.wumei</groupId>
-                <artifactId>wumei-generator</artifactId>
-                <version>${wumei.version}</version>
+                <groupId>net.pingfang</groupId>
+                <artifactId>iot-generator</artifactId>
+                <version>${iot.version}</version>
             </dependency>
 
             <!-- 核心模块-->
             <dependency>
-                <groupId>com.wumei</groupId>
-                <artifactId>wumei-framework</artifactId>
-                <version>${wumei.version}</version>
+                <groupId>net.pingfang</groupId>
+                <artifactId>iot-framework</artifactId>
+                <version>${iot.version}</version>
             </dependency>
 
             <!-- 系统模块-->
             <dependency>
-                <groupId>com.wumei</groupId>
-                <artifactId>wumei-system</artifactId>
-                <version>${wumei.version}</version>
+                <groupId>net.pingfang</groupId>
+                <artifactId>iot-system</artifactId>
+                <version>${iot.version}</version>
             </dependency>
 
             <!-- 通用工具-->
             <dependency>
-                <groupId>com.wumei</groupId>
-                <artifactId>wumei-common</artifactId>
-                <version>${wumei.version}</version>
+                <groupId>net.pingfang</groupId>
+                <artifactId>iot-common</artifactId>
+                <version>${iot.version}</version>
             </dependency>
 
             <!-- 物联网-->
             <dependency>
-                <groupId>com.wumei</groupId>
-                <artifactId>wumei-iot</artifactId>
-                <version>${wumei.version}</version>
+                <groupId>net.pingfang</groupId>
+                <artifactId>iot-core</artifactId>
+                <version>${iot.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>31.0.1-jre</version>
-            </dependency>
-            <dependency>
-                <groupId>io.vertx</groupId>
-                <artifactId>vertx-core</artifactId>
-                <version>${vertx.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.vertx</groupId>
-                <artifactId>vertx-mqtt</artifactId>
-                <version>${vertx.version}</version>
-            </dependency>
 
         </dependencies>
     </dependencyManagement>
 
     <modules>
-        <module>wumei-admin</module>
-        <module>wumei-framework</module>
-        <module>wumei-system</module>
-        <module>wumei-quartz</module>
-        <module>wumei-generator</module>
-        <module>wumei-common</module>
-        <module>wumei-iot</module>
-        <module>wumei-network</module>
+        <module>iot-admin</module>
+        <module>iot-framework</module>
+        <module>iot-system</module>
+        <module>iot-quartz</module>
+        <module>iot-generator</module>
+        <module>iot-common</module>
+        <module>iot-core</module>
     </modules>
     <packaging>pom</packaging>
 
