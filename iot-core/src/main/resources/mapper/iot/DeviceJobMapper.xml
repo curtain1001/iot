@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.pingfang.iot.core.mapper.DeviceJobMapper">
+
+    <resultMap id="DeviceJobResult" type="net.pingfang.iot.core.domain.DeviceJob">
+        <id column="job_id" property="jobId" />
+        <result column="job_name" property="jobName" />
+        <result column="job_group" property="jobGroup" />
+        <result column="serial_number" property="serialNumber" />
+        <result column="device_id" property="deviceId" />
+        <result column="device_name" property="deviceName" />
+        <result column="actions" property="actions" />
+        <result column="is_advance" property="isAdvance" />
+        <result column="cron_expression" property="cronExpression" />
+        <result column="misfire_policy" property="misfirePolicy" />
+        <result column="concurrent" property="concurrent" />
+        <result column="status" property="status" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="remark" property="remark" />
+        <result column="job_type" property="jobType" />
+        <result column="product_id" property="productId" />
+        <result column="product_name" property="productName" />
+        <result column="scene_id" property="sceneId" />
+        <result column="alert_id" property="alertId" />
+    </resultMap>
+
+    <sql id="selectJobVo">
+        select job_id,
+               job_name,
+               job_group,
+               serial_number,
+               device_id,
+               device_name,
+               actions,
+               is_advance,
+               cron_expression,
+               misfire_policy,
+               concurrent,
+               status,
+               create_by,
+               create_time,
+               remark,
+               job_type,
+               product_id,
+               product_name,
+               scene_id,
+               alert_id
+        from iot_device_job
+    </sql>
+
+    <select id="selectShortJobListByDeviceIds" parameterType="Long" resultMap="DeviceJobResult">
+        select job_id, job_name, job_group from iot_device_job
+        where device_id in
+        <foreach close=")" collection="array" item="deviceId" open="(" separator=",">
+            #{deviceId}
+        </foreach>
+    </select>
+
+    <select id="selectJobList" parameterType="net.pingfang.iot.core.domain.DeviceJob" resultMap="DeviceJobResult">
+        <include refid="selectJobVo" />
+        <where>
+            <if test="1==1">and device_id = #{deviceId}</if>
+            <if test="jobName != null and jobName != ''">
+                AND job_name like concat('%', #{jobName}, '%')
+            </if>
+            <if test="jobGroup != null and jobGroup != ''">
+                AND job_group = #{jobGroup}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectJobAll" resultMap="DeviceJobResult">
+        <include refid="selectJobVo" />
+    </select>
+
+    <select id="selectJobById" parameterType="Long" resultMap="DeviceJobResult">
+        <include refid="selectJobVo" />
+        where job_id = #{jobId}
+    </select>
+
+    <delete id="deleteJobById" parameterType="Long">
+        delete
+        from iot_device_job
+        where job_id = #{jobId}
+    </delete>
+
+    <delete id="deleteJobByIds" parameterType="Long">
+        delete from iot_device_job where job_id in
+        <foreach close=")" collection="array" item="jobId" open="(" separator=",">
+            #{jobId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteJobByDeviceIds" parameterType="Long">
+        delete from iot_device_job where device_id in
+        <foreach close=")" collection="array" item="deviceId" open="(" separator=",">
+            #{deviceId}
+        </foreach>
+    </delete>
+
+    <update id="updateJob" parameterType="net.pingfang.iot.core.domain.DeviceJob">
+        update iot_device_job
+        <set>
+            <if test="jobName != null and jobName != ''">job_name = #{jobName},</if>
+            <if test="jobGroup != null and jobGroup != ''">job_group = #{jobGroup},</if>
+            <if test="deviceId != null and deviceId != ''">device_id = #{deviceId},</if>
+            <if test="deviceName != null and deviceName != ''">device_name = #{deviceName},</if>
+            <if test="serialNumber != null and serialNumber != ''">serial_number = #{serialNumber},</if>
+            <if test="actions != null and actions != ''">actions = #{actions},</if>
+            <if test="cronExpression != null and cronExpression != ''">cron_expression = #{cronExpression},</if>
+            <if test="misfirePolicy != null and misfirePolicy != ''">misfire_policy = #{misfirePolicy},</if>
+            <if test="concurrent != null and concurrent != ''">concurrent = #{concurrent},</if>
+            <if test="status !=null">status = #{status},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="jobType != null">job_type = #{jobType},</if>
+            <if test="productId != null and productId!=0">product_id = #{productId},</if>
+            <if test="productName != null and productName!=''">product_name = #{productName},</if>
+            <if test="sceneId != null and sceneId!=0">scene_id = #{sceneId},</if>
+            <if test="alertId != null and alertId!=0">alert_id = #{alertId},</if>
+            is_advance =#{isAdvance},
+            update_time = sysdate()
+        </set>
+        where job_id = #{jobId}
+    </update>
+
+    <insert id="insertJob" keyProperty="jobId" parameterType="net.pingfang.iot.core.domain.DeviceJob"
+            useGeneratedKeys="true">
+        insert into iot_device_job(
+        <if test="jobId != null and jobId != 0">job_id,</if>
+        <if test="jobName != null and jobName != ''">job_name,</if>
+        <if test="jobGroup != null and jobGroup != ''">job_group,</if>
+        <if test="deviceId != null and deviceId != ''">device_id,</if>
+        <if test="deviceName != null and deviceName != ''">device_name,</if>
+        <if test="serialNumber != null and serialNumber != ''">serial_number,</if>
+        <if test="actions != null and actions != ''">actions,</if>
+        <if test="cronExpression != null and cronExpression != ''">cron_expression,</if>
+        <if test="misfirePolicy != null and misfirePolicy != ''">misfire_policy,</if>
+        <if test="concurrent != null and concurrent != ''">concurrent,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="jobType != null and jobType!=''">job_type,</if>
+        <if test="productId != null and productId!=0">product_id,</if>
+        <if test="productName != null and productName!=''">product_name,</if>
+        <if test="sceneId != null and sceneId!=0">scene_id,</if>
+        <if test="alertId != null and alertId!=0">alert_id,</if>
+        is_advance,
+        create_time
+        )values(
+        <if test="jobId != null and jobId != 0">#{jobId},</if>
+        <if test="jobName != null and jobName != ''">#{jobName},</if>
+        <if test="jobGroup != null and jobGroup != ''">#{jobGroup},</if>
+        <if test="deviceId != null and deviceId != ''">#{deviceId},</if>
+        <if test="deviceName != null and deviceName != ''">#{deviceName},</if>
+        <if test="serialNumber != null and serialNumber != ''">#{serialNumber},</if>
+        <if test="actions != null and actions != ''">#{actions},</if>
+        <if test="cronExpression != null and cronExpression != ''">#{cronExpression},</if>
+        <if test="misfirePolicy != null and misfirePolicy != ''">#{misfirePolicy},</if>
+        <if test="concurrent != null and concurrent != ''">#{concurrent},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="jobType != null and jobType!=''">#{jobType},</if>
+        <if test="productId != null and productId!=0">#{productId},</if>
+        <if test="productName != null and productName!=''">#{productName},</if>
+        <if test="sceneId != null and sceneId!=0">#{sceneId},</if>
+        <if test="alertId != null and alertId!=0">#{alertId},</if>
+        #{isAdvance},
+        sysdate()
+        )
+    </insert>
+
+</mapper>

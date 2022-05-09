@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.pingfang.iot.core.mapper.SceneMapper">
+
+    <resultMap id="SceneResult" type="net.pingfang.iot.core.domain.Scene">
+        <result column="scene_id" property="sceneId" />
+        <result column="scene_name" property="sceneName" />
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="triggers" property="triggers" />
+        <result column="actions" property="actions" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+    <sql id="selectSceneVo">
+        select scene_id,
+               scene_name,
+               user_id,
+               user_name,
+               triggers,
+               actions,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from iot_scene
+    </sql>
+
+    <select id="selectSceneList" parameterType="net.pingfang.iot.core.domain.Scene" resultMap="SceneResult">
+        <include refid="selectSceneVo" />
+        <where>
+            <if test="sceneName != null  and sceneName != ''">and scene_name like concat('%', #{sceneName}, '%')</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''">and user_name like concat('%', #{userName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectSceneBySceneId" parameterType="Long" resultMap="SceneResult">
+        <include refid="selectSceneVo" />
+        where scene_id = #{sceneId}
+    </select>
+
+    <insert id="insertScene" keyProperty="sceneId" parameterType="net.pingfang.iot.core.domain.Scene"
+            useGeneratedKeys="true">
+        insert into iot_scene
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sceneName != null and sceneName != ''">scene_name,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="triggers != null and triggers != ''">triggers,</if>
+            <if test="actions != null and actions != ''">actions,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sceneName != null and sceneName != ''">#{sceneName},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="triggers != null and triggers != ''">#{triggers},</if>
+            <if test="actions != null and actions != ''">#{actions},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateScene" parameterType="net.pingfang.iot.core.domain.Scene">
+        update iot_scene
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sceneName != null and sceneName != ''">scene_name = #{sceneName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="triggers != null and triggers != ''">triggers = #{triggers},</if>
+            <if test="actions != null and actions != ''">actions = #{actions},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where scene_id = #{sceneId}
+    </update>
+
+    <delete id="deleteSceneBySceneId" parameterType="Long">
+        delete
+        from iot_scene
+        where scene_id = #{sceneId}
+    </delete>
+
+    <delete id="deleteSceneBySceneIds" parameterType="String">
+        delete from iot_scene where scene_id in
+        <foreach close=")" collection="array" item="sceneId" open="(" separator=",">
+            #{sceneId}
+        </foreach>
+    </delete>
+</mapper>

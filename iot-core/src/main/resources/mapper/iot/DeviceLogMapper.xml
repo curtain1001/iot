@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.pingfang.iot.core.mapper.DeviceLogMapper">
+
+    <resultMap id="MonitorResult" type="net.pingfang.iot.core.model.MonitorModel">
+        <result column="log_value" property="value" />
+        <result column="create_time" property="time" />
+    </resultMap>
+
+    <resultMap id="DeviceLogResult" type="net.pingfang.iot.core.domain.DeviceLog">
+        <result column="log_id" property="logId" />
+        <result column="log_type" property="logType" />
+        <result column="log_value" property="logValue" />
+        <result column="device_id" property="deviceId" />
+        <result column="device_name" property="deviceName" />
+        <result column="serial_number" property="serialNumber" />
+        <result column="identity" property="identity" />
+        <result column="create_by" property="createBy" />
+        <result column="is_monitor" property="isMonitor" />
+        <result column="create_time" property="createTime" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+    <sql id="selectDeviceLogVo">
+        select log_id,
+               log_type,
+               log_value,
+               device_id,
+               device_name,
+               serial_number,
+               identity,
+               create_by,
+               is_monitor,
+               create_time,
+               remark
+        from iot_device_log
+    </sql>
+
+    <select id="selectMonitorList" parameterType="net.pingfang.iot.core.domain.DeviceLog" resultMap="MonitorResult">
+        select log_value, create_time
+        from iot_device_log
+        where device_id = #{deviceId}
+          and identity = #{identity}
+          and is_monitor = 1
+        order by create_time desc
+        limit 2000
+    </select>
+
+    <select id="selectDeviceLogList" parameterType="net.pingfang.iot.core.domain.DeviceLog" resultMap="DeviceLogResult">
+        <include refid="selectDeviceLogVo" />
+        <where>
+            <if test="1==1">and device_id = #{deviceId} and is_monitor !=1</if>
+            <if test="logType != null ">and log_type = #{logType}</if>
+            <if test="identity != null  and identity != ''">and identity like concat('%', #{identity}, '%')</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectDeviceLogByLogId" parameterType="Long" resultMap="DeviceLogResult">
+        <include refid="selectDeviceLogVo" />
+        where log_id = #{logId}
+    </select>
+
+    <insert id="insertDeviceLog" keyProperty="logId" parameterType="net.pingfang.iot.core.domain.DeviceLog"
+            useGeneratedKeys="true">
+        insert into iot_device_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logType != null">log_type,</if>
+            <if test="logValue != null">log_value,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="deviceName != null and deviceName != ''">device_name,</if>
+            <if test="serialNumber != null and serialNumber != ''">serial_number,</if>
+            <if test="identity != null">identity,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="isMonitor != null">is_monitor,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logType != null">#{logType},</if>
+            <if test="logValue != null">#{logValue},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="deviceName != null and deviceName != ''">#{deviceName},</if>
+            <if test="serialNumber != null and serialNumber != ''">#{serialNumber},</if>
+            <if test="identity != null">#{identity},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="isMonitor != null">#{isMonitor},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDeviceLog" parameterType="net.pingfang.iot.core.domain.DeviceLog">
+        update iot_device_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logType != null">log_type = #{logType},</if>
+            <if test="logValue != null">log_value = #{logValue},</if>
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="deviceName != null and deviceName != ''">device_name = #{deviceName},</if>
+            <if test="serialNumber != null and serialNumber != ''">serial_number = #{serialNumber},</if>
+            <if test="identity != null">identity = #{identity},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="isMonitor != null">is_monitor = #{isMonitor},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where log_id = #{logId}
+    </update>
+
+    <delete id="deleteDeviceLogByLogId" parameterType="Long">
+        delete
+        from iot_device_log
+        where log_id = #{logId}
+    </delete>
+
+    <delete id="deleteDeviceLogByLogIds" parameterType="String">
+        delete from iot_device_log where log_id in
+        <foreach close=")" collection="array" item="logId" open="(" separator=",">
+            #{logId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteDeviceLogByDeviceIds" parameterType="String">
+        delete from iot_device_log where device_id in
+        <foreach close=")" collection="array" item="deviceId" open="(" separator=",">
+            #{deviceId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.pingfang.iot.core.mapper.ProductAuthorizeMapper">
+
+    <resultMap id="ProductAuthorizeResult" type="net.pingfang.iot.core.domain.ProductAuthorize">
+        <result column="authorize_id" property="authorizeId" />
+        <result column="authorize_code" property="authorizeCode" />
+        <result column="product_id" property="productId" />
+        <result column="device_id" property="deviceId" />
+        <result column="serial_number" property="serialNumber" />
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="del_flag" property="delFlag" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+    <sql id="selectProductAuthorizeVo">
+        select authorize_id,
+               authorize_code,
+               product_id,
+               device_id,
+               serial_number,
+               user_id,
+               user_name,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from iot_product_authorize
+    </sql>
+
+    <select id="selectProductAuthorizeList" parameterType="net.pingfang.iot.core.domain.ProductAuthorize"
+            resultMap="ProductAuthorizeResult">
+        <include refid="selectProductAuthorizeVo" />
+        <where>
+            <if test="authorizeCode != null  and authorizeCode != ''">and authorize_code = #{authorizeCode}</if>
+            <if test="productId != null ">and product_id = #{productId}</if>
+            <if test="deviceId != null ">and device_id = #{deviceId}</if>
+            <if test="serialNumber != null  and serialNumber != ''">and serial_number = #{serialNumber}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''">and user_name like concat('%', #{userName}, '%')</if>
+        </where>
+        order by
+        device_id desc
+    </select>
+
+    <select id="selectProductAuthorizeByAuthorizeId" parameterType="Long" resultMap="ProductAuthorizeResult">
+        <include refid="selectProductAuthorizeVo" />
+        where authorize_id = #{authorizeId}
+    </select>
+    <select id="selectOneUnboundAuthorizeByProductId" parameterType="net.pingfang.iot.core.domain.ProductAuthorize"
+            resultType="net.pingfang.iot.core.domain.ProductAuthorize">
+        <include refid="selectProductAuthorizeVo" />
+        where
+        del_flag = 0
+        and product_id = #{productId}
+        and serial_number is null
+        and device_id is null
+        limit 1
+    </select>
+
+    <select id="selectOneUnboundAuthorizeByAuthorizeCode" parameterType="net.pingfang.iot.core.domain.ProductAuthorize"
+            resultType="net.pingfang.iot.core.domain.ProductAuthorize">
+        <include refid="selectProductAuthorizeVo" />
+        where
+        del_flag = 0
+        and authorize_code = #{authorizeCode}
+        and serial_number is null
+        and device_id is null
+        limit 1
+    </select>
+
+    <insert id="insertProductAuthorize" parameterType="net.pingfang.iot.core.domain.ProductAuthorize">
+        insert into iot_product_authorize
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="authorizeCode != null and authorizeCode != ''">authorize_code,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="serialNumber != null">serial_number,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="authorizeCode != null and authorizeCode != ''">#{authorizeCode},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="serialNumber != null">#{serialNumber},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+    <insert id="insertBatchAuthorize" keyProperty="authorizeId" parameterType="net.pingfang.iot.core.domain.ProductAuthorize"
+            useGeneratedKeys="true">
+        insert into iot_product_authorize (authorize_code,product_id,create_by,create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.authorizeCode},#{item.productId},#{item.createBy},#{item.createTime}
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateProductAuthorize" parameterType="net.pingfang.iot.core.domain.ProductAuthorize">
+        update iot_product_authorize
+        <trim prefix="SET" suffixOverrides=",">
+            user_id = #{userId},
+            device_id = #{deviceId},
+            <if test="authorizeCode != null and authorizeCode != ''">authorize_code = #{authorizeCode},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where authorize_id = #{authorizeId}
+    </update>
+
+    <delete id="deleteProductAuthorizeByAuthorizeId" parameterType="Long">
+        delete
+        from iot_product_authorize
+        where authorize_id = #{authorizeId}
+    </delete>
+
+    <delete id="deleteProductAuthorizeByAuthorizeIds" parameterType="String">
+        delete from iot_product_authorize where authorize_id in
+        <foreach close=")" collection="array" item="authorizeId" open="(" separator=",">
+            #{authorizeId}
+        </foreach>
+    </delete>
+</mapper>
