@@ -28,8 +28,8 @@ import net.pingfang.iot.framework.datasource.DynamicDataSourceContextHolder;
 public class DataSourceAspect {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Pointcut("@annotation(net.pingfang.common.annotation.DataSource)"
-			+ "|| @within(net.pingfang.common.annotation.DataSource)")
+	@Pointcut("@annotation(net.pingfang.iot.common.annotation.DataSource)"
+			+ "|| @within(net.pingfang.iot.common.annotation.DataSource)")
 	public void dsPointCut() {
 
 	}

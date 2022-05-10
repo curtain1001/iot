@@ -13,6 +13,22 @@
     <description>
         物美智能-开源生活物联网平台
     </description>
+    <properties>
+        <jetlinks.version>1.1.9</jetlinks.version>
+        <project.build.jdk>${java.version}</project.build.jdk>
+        <hsweb.framework.version>4.0.13</hsweb.framework.version>
+        <easyorm.version>4.0.13</easyorm.version>
+        <hsweb.expands.version>3.0.2</hsweb.expands.version>
+        <jetlinks.version>1.1.9</jetlinks.version>
+        <r2dbc.version>Arabba-SR10</r2dbc.version>
+        <vertx.version>4.2.3</vertx.version>
+        <netty.version>4.1.73.Final</netty.version>
+        <elasticsearch.version>7.11.2</elasticsearch.version>
+        <reactor.excel.version>1.0.1</reactor.excel.version>
+        <reactor.ql.version>1.0.13</reactor.ql.version>
+        <fastjson.version>1.2.70</fastjson.version>
+    </properties>
+
 
     <dependencies>
 
@@ -85,6 +101,178 @@
             <groupId>com.dtflys.forest</groupId>
             <artifactId>forest-spring-boot-starter</artifactId>
             <version>${forest.version}</version>
+        </dependency>
+
+
+        <!--        jeklint-->
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-bom</artifactId>
+            <version>${netty.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetlinks</groupId>
+            <artifactId>reactor-ql</artifactId>
+            <version>${reactor.ql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson</groupId>
+            <artifactId>jackson-bom</artifactId>
+            <version>2.13.2.1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hswebframework</groupId>
+            <artifactId>reactor-excel</artifactId>
+            <version>${reactor.excel.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>0.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+        <!--            <dependency>-->
+        <!--                <groupId>io.r2dbc</groupId>-->
+        <!--                <artifactId>r2dbc-bom</artifactId>-->
+        <!--                <version>${r2dbc.version}</version>-->
+        <!--                <type>pom</type>-->
+        <!--                <scope>import</scope>-->
+        <!--            </dependency>-->
+
+
+        <!--            <dependency>-->
+        <!--                <groupId>org.hswebframework.web</groupId>-->
+        <!--                <artifactId>hsweb-framework</artifactId>-->
+        <!--                <version>${hsweb.framework.version}</version>-->
+        <!--                <type>pom</type>-->
+        <!--                <scope>import</scope>-->
+        <!--                <exclusions>-->
+        <!--                    <exclusion>-->
+        <!--                        <groupId>org.springframework.boot</groupId>-->
+        <!--                        <artifactId>spring-boot-dependencies</artifactId>-->
+        <!--                    </exclusion>-->
+        <!--                </exclusions>-->
+        <!--            </dependency>-->
+
+        <dependency>
+            <groupId>org.jetlinks</groupId>
+            <artifactId>rule-engine-support</artifactId>
+            <version>${jetlinks.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetlinks</groupId>
+            <artifactId>jetlinks-supports</artifactId>
+            <version>${jetlinks.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!--            <dependency>-->
+        <!--                <groupId>io.vertx</groupId>-->
+        <!--                <artifactId>vertx-mqtt</artifactId>-->
+        <!--                <version>${vertx.version}</version>-->
+        <!--            </dependency>-->
+
+
+        <!--            <dependency>-->
+        <!--                <groupId>org.hswebframework</groupId>-->
+        <!--                <artifactId>hsweb-easy-orm-core</artifactId>-->
+        <!--                <version>${easyorm.version}</version>-->
+        <!--            </dependency>-->
+
+        <!--            <dependency>-->
+        <!--                <groupId>org.hswebframework</groupId>-->
+        <!--                <artifactId>hsweb-easy-orm-rdb</artifactId>-->
+        <!--                <version>${easyorm.version}</version>-->
+        <!--            </dependency>-->
+        <!--            <dependency>-->
+        <!--                <groupId>org.hswebframework</groupId>-->
+        <!--                <artifactId>hsweb-easy-orm-elasticsearch</artifactId>-->
+        <!--                <version>${easyorm.version}</version>-->
+        <!--            </dependency>-->
+
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-tools</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.hswebframework</groupId>
+            <artifactId>hsweb-utils</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetlinks</groupId>
+            <artifactId>rule-engine-api</artifactId>
+            <version>1.1.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hswebframework</groupId>
+            <artifactId>hsweb-expands-script</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.5-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
         </dependency>
 
 
